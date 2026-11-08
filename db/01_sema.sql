@@ -6,6 +6,9 @@
 -- Not: PostgreSQL, foreign key kolonlarına otomatik index açmaz.
 -- siparisler.musteri_id gibi kolonlarda index yok; index modülünde bunu kendimiz ekleyeceğiz.
 
+-- Windows'ta konsol kod sayfası farklıysa Türkçe karakterler bozulmasın.
+SET client_encoding = 'UTF8';
+
 SET client_min_messages = warning;   -- DROP ... IF EXISTS satırları ekrana uyarı basmasın
 
 DROP TABLE IF EXISTS odemeler          CASCADE;

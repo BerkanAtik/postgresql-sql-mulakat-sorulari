@@ -4,6 +4,9 @@
 -- Böylece sorulardaki sonuçlar her makinede aynı çıkıyor.
 -- Siparişler 2024 yılına yayılmış. Sorgularda CURRENT_DATE yerine sabit tarih kullanın.
 
+-- Windows'ta konsol kod sayfası farklıysa Türkçe karakterler bozulmasın.
+SET client_encoding = 'UTF8';
+
 -- ---------------------------------------------------------------
 -- Kategoriler
 -- ---------------------------------------------------------------
