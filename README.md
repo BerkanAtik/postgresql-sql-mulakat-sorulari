@@ -4,7 +4,7 @@ Junior ve stajyer mülakatlarında sık karşına çıkan SQL sorularını, kend
 
 Soruyu okuyorsun, sorguyu kendin yazıp gerçek bir veritabanında çalıştırıyorsun, sonra çözümle karşılaştırıyorsun. Çözümlerin hepsi PostgreSQL 17'de çalıştırılıp doğrulanıyor.
 
-> **Durum:** Veritabanı, doğrulama altyapısı ve ilk modül hazır. Diğer modüller sırayla ekleniyor, aşağıdaki tabloda hangisinin hazır olduğunu görebilirsin.
+> **Durum:** Örnek veritabanı, 7 pratik modül (51 soru) ve 30 kavramsal soru hazır. Repo yayına hazırlanıyor, küçük düzeltmeler gelmeye devam edecek.
 
 ## Kimler için
 
@@ -76,7 +76,7 @@ Sadece çözümü okuyup geçmek pek işe yaramıyor, elin yazmayınca mülakatt
 | [05 Window functions](pratik/05-window-functions/README.md) | `ROW_NUMBER`, `RANK`, `DENSE_RANK`, `LAG`, kümülatif toplam | 7 soru hazır |
 | [06 Index ve EXPLAIN](pratik/06-index-ve-explain/README.md) | `EXPLAIN ANALYZE` okumak, birleşik index, expression index, index'in işe yaramadığı durumlar | 4 soru hazır |
 | [07 Transaction](pratik/07-transaction/README.md) | `BEGIN`, `COMMIT`, `ROLLBACK`, `SAVEPOINT`, kayıp güncelleme, isolation level, deadlock | 6 soru hazır |
-| Kavramsal sorular | ACID, normalizasyon, index, `JOIN` farkları, `DELETE`/`TRUNCATE`/`DROP` | yazılacak |
+| [Kavramsal sorular](kavramsal/README.md) | ACID, normalizasyon, index, `JOIN` farkları, `DELETE`/`TRUNCATE`/`DROP`, MVCC, view | 30 soru hazır |
 
 ## Örnek veritabanı
 
