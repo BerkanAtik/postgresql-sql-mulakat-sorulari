@@ -170,6 +170,8 @@ else
                 continue
             fi
 
+            # Windows'taki psql satır sonlarına \r bırakabiliyor, karşılaştırmayı bozmasın.
+            cikti="$(printf '%s' "$cikti" | tr -d '\r')"
             gelen="$(printf '%s' "$cikti" | grep -c '')"
             satirlar="$satirlar $gelen"
             if [ -n "$beklenen" ] && [ "$gelen" != "$beklenen" ]; then
