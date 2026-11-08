@@ -5,6 +5,10 @@ on:
     branches: [main]
   pull_request:
 
+# Bu workflow sadece kodu okuyor, yazma yetkisine ihtiyacı yok.
+permissions:
+  contents: read
+
 jobs:
   dogrula:
     runs-on: ubuntu-latest

@@ -6,7 +6,7 @@ labels: bug
 ---
 
 **Hangi dosya?**
-<!-- Örnek: pratik/03-join/04-siparissiz-musteriler.md -->
+<!-- Örnek: pratik/03-join/03-hic-siparis-vermeyen-musteriler.md -->
 
 **Sorun ne?**
 <!-- Çözüm hata veriyor mu, sonuç yanlış mı, açıklamadaki bir sayı mı tutmuyor? -->

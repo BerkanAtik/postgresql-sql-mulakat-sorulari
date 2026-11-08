@@ -9,6 +9,10 @@
 #   PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE, PSQL (psql'in yolu)
 # Varsayılanlar docker-compose.yml'deki değerlerle aynı.
 #
+# Bilgisayarında psql kurulu değilse ama Docker varsa, betik container'ın içindeki psql'i
+# kullanır (container adı KONTEYNER değişkeniyle değiştirilebilir, varsayılan sql-mulakat-db).
+# Yani Docker kurulu olması yeterli, ayrıca psql kurman gerekmez.
+#
 # Soru dosyalarında (NN-ad.md) şunları arar:
 #   - "## Çözüm" ve "## Alternatif ..." başlıklarının altındaki bütün ```sql blokları.
 #     Her biri ayrı ayrı çalıştırılır, hata veren olursa test düşer.
@@ -33,14 +37,49 @@ export PGPASSWORD="${PGPASSWORD:-sifre}"
 export PGDATABASE="${PGDATABASE:-eticaret}"
 export PGCLIENTENCODING=UTF8
 
-PSQL="${PSQL:-psql}"
+KONTEYNER="${KONTEYNER:-sql-mulakat-db}"
 KOK="${1:-pratik}"
+
+# psql nerede? Önce PSQL değişkeni, sonra PATH, o da yoksa Docker container'ı.
+DOCKER_PSQL=0
+if [ -z "${PSQL:-}" ]; then
+    if command -v psql > /dev/null 2>&1; then
+        PSQL=psql
+    elif command -v docker > /dev/null 2>&1; then
+        DOCKER_PSQL=1
+        export MSYS_NO_PATHCONV=1   # Windows'taki Git Bash argümanlardaki yolları bozmasın
+    else
+        PSQL=psql
+    fi
+fi
 
 basarili=0
 hatali=0
 
 sql() {
-    "$PSQL" -X -q -At -v ON_ERROR_STOP=1 "$@"
+    if [ "$DOCKER_PSQL" -eq 1 ]; then
+        # Dosyalar ana makinede, psql container'da: "-f dosya" yerine dosyayı stdin'den veriyoruz.
+        local dosya="" args=()
+        while [ $# -gt 0 ]; do
+            if [ "$1" = "-f" ]; then
+                dosya="$2"
+                shift 2
+            else
+                args+=("$1")
+                shift
+            fi
+        done
+        local kom=(docker exec -i -e PGCLIENTENCODING=UTF8 "$KONTEYNER" \
+                   psql -U "$PGUSER" -d "$PGDATABASE" -X -q -At -v ON_ERROR_STOP=1)
+        if [ -n "$dosya" ]; then
+            "${kom[@]}" ${args[@]+"${args[@]}"} < "$dosya"
+        else
+            # /dev/null: docker, çağıran döngünün girdisini (find çıktısı) yutmasın.
+            "${kom[@]}" ${args[@]+"${args[@]}"} < /dev/null
+        fi
+    else
+        "$PSQL" -X -q -At -v ON_ERROR_STOP=1 "$@"
+    fi
 }
 
 tamam() {
@@ -66,10 +105,15 @@ kontrol() {
     fi
 }
 
-echo "== Veritabanı kontrolleri ($PGHOST:$PGPORT/$PGDATABASE)"
+if [ "$DOCKER_PSQL" -eq 1 ]; then
+    echo "== Veritabanı kontrolleri (container $KONTEYNER, $PGDATABASE)"
+else
+    echo "== Veritabanı kontrolleri ($PGHOST:$PGPORT/$PGDATABASE)"
+fi
 
 if ! sql -c "SELECT 1" > /dev/null 2>&1; then
     echo "HATA   Veritabanına bağlanılamadı. 'docker compose up -d' çalışıyor mu?"
+    [ "$DOCKER_PSQL" -eq 1 ] && echo "         (psql bulunamadı, '$KONTEYNER' container'ındaki psql denendi)"
     exit 1
 fi
 
@@ -173,9 +217,13 @@ else
             if printf '%s' "$cozum" | grep -qiE '^[[:space:]]*(BEGIN|START[[:space:]]+TRANSACTION|COMMIT)\b'; then
                 # Çözüm kendi transaction'ını açıyorsa sarmalamıyoruz, ama tek başına duran
                 # COMMIT satırlarını ROLLBACK'e çeviriyoruz ki doğrulama veriyi değiştirmesin.
-                printf '%s\n' "$cozum" | awk '{ if (toupper($0) ~ /^[ \t]*COMMIT[ \t]*;?[ \t]*$/) print "ROLLBACK;"; else print }' > "$calisma"
+                { echo "SET client_min_messages = warning;"
+                  printf '%s\n' "$cozum" | awk '{ if (toupper($0) ~ /^[ \t]*COMMIT[ \t]*;?[ \t]*$/) print "ROLLBACK;"; else print }'
+                } > "$calisma"
             else
-                printf 'BEGIN;\n%s\nROLLBACK;\n' "$cozum" > "$calisma"
+                # client_min_messages: "extension already exists, skipping" gibi NOTICE satırları
+                # çıktıya karışıp satır sayısını bozmasın (örneğin pg_trgm daha önce kurulmuşsa).
+                printf 'SET client_min_messages = warning;\nBEGIN;\n%s\nROLLBACK;\n' "$cozum" > "$calisma"
             fi
 
             if ! cikti="$(sql -f "$calisma" 2>&1)"; then

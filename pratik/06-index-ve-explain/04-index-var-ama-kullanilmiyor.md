@@ -47,7 +47,7 @@ Seq Scan on ziyaretler
 Execution Time: 28 ms
 ```
 
-Önek araması B-tree'nin tam yapabileceği bir iş gibi görünüyor ama index kullanılmadı. Sebep **collation** (karşılaştırma kuralı). Veritabanı `C` dışında bir dil kuralıyla kurulmuşsa (`en_US.utf8`, Türkçe vb.) harfler dile göre sıralanıyor. Böyle bir sıralamada "`sep` ile başlayan her şey index'te yan yana durur" garantisi yok, o yüzden PostgreSQL normal index'e güvenmiyor. Docker imajı da varsayılan olarak `en_US.utf8` ile kuruluyor, yani senin ortamında da büyük ihtimalle böyle. Ben `en-US` ICU collation'lı bir veritabanında ölçtüm. `C` collation'lı bir veritabanında normal index de önek aramasında çalışır, sonuç farklı çıkabilir.
+Önek araması B-tree'nin tam yapabileceği bir iş gibi görünüyor ama index kullanılmadı. Sebep **collation** (karşılaştırma kuralı). Veritabanı `C` dışında bir dil kuralıyla kurulmuşsa (`en_US.utf8`, Türkçe vb.) harfler dile göre sıralanıyor. Böyle bir sıralamada "`sep` ile başlayan her şey index'te yan yana durur" garantisi yok, o yüzden PostgreSQL normal index'e güvenmiyor. Bu repodaki Docker imajında veritabanı `en_US.utf8` ile kuruluyor, yani senin ortamında da böyle ve aynı planı orada da doğruladım. `C` collation'lı bir veritabanında normal index de önek aramasında çalışır, sonuç farklı çıkabilir.
 
 Çözüm index'i `text_pattern_ops` ile kurmak. Bu operatör sınıfı harfleri dile göre değil, düz karakter sırasına göre sıralıyor:
 

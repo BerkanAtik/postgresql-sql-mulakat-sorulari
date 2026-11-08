@@ -20,6 +20,8 @@ Issue'da dosya adını ve hangi satırdan bahsettiğini yaz, bir de kendi çalı
 bash scripts/validate.sh
 ```
 
+Bilgisayarında `psql` kurulu değilse betik Docker container'ının içindekini kullanır, ayrıca bir şey kurman gerekmez. Windows'ta Git Bash ya da WSL terminalinden çalıştır.
+
 Hepsi geçmeden PR açma. Aynı kontrol GitHub'da da otomatik çalışıyor.
 
 ## Yeni soru eklemek

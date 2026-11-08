@@ -6,7 +6,7 @@ Junior ve stajyer mülakatlarında sık karşına çıkan SQL sorularını, kend
 
 Soruyu okuyorsun, sorguyu kendin yazıp gerçek bir veritabanında çalıştırıyorsun, sonra çözümle karşılaştırıyorsun. Çözümlerin hepsi PostgreSQL 17'de çalıştırılıp doğrulanıyor.
 
-> **Durum:** Örnek veritabanı, 7 pratik modül (51 soru) ve 30 kavramsal soru hazır. Repo yayına hazırlanıyor, küçük düzeltmeler gelmeye devam edecek.
+> **Durum:** Örnek veritabanı, 7 pratik modül (45 soru) ve 30 kavramsal soru hazır. Hata bulursan ya da soru önermek istersen [katkı rehberine](CONTRIBUTING.md) bak.
 
 ## Kimler için
 
@@ -31,6 +31,12 @@ docker compose ps
 ```
 
 `healthy` yazıyorsa bağlanabilirsin.
+
+**Windows'ta:** `docker compose up -d` komutundan önce Docker Desktop'ın açık olması gerekiyor (sol altta yeşil "Engine running" yazmalı). Docker Desktop "WSL not installed" hatası verirse yönetici olarak açtığın PowerShell'de şunu çalıştır, sonra Docker Desktop'ı yeniden aç (gerekirse bilgisayarı da yeniden başlat):
+
+```powershell
+wsl --install
+```
 
 ## Veritabanına bağlanmak
 
@@ -101,7 +107,9 @@ Soru dosyalarındaki çözümlerin gerçekten çalıştığını kontrol eden bi
 bash scripts/validate.sh
 ```
 
-Hem örnek verinin bozulmadığını hem de her çözümün hatasız çalıştığını kontrol eder. Aynı kontrol GitHub'da her push'ta otomatik çalışıyor.
+Hem örnek verinin bozulmadığını hem de her çözümün hatasız çalıştığını kontrol eder. Bilgisayarında `psql` kurulu olmasına gerek yok, yoksa Docker container'ının içindekini kullanır. Windows'ta bunu Git Bash'ten (Git for Windows ile gelir) ya da WSL terminalinden çalıştır.
+
+Aynı kontrol GitHub'da her push'ta otomatik çalışıyor.
 
 ## Katkı
 
