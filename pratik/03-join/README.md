@@ -19,7 +19,7 @@ Akılda tutman gereken birkaç şey:
 
 - Birden fazla tabloyla çalışırken her kolonun başına tablosunun takma adını yaz (`m.ad`, `s.siparis_id`).
 - Eşi olmayan satırları da görmek istiyorsan `LEFT JOIN`. Eşi olmayanları bulmak istiyorsan `LEFT JOIN` + `IS NULL` ya da `NOT EXISTS`.
-- `LEFT JOIN`'de sağdaki tablonun koşulları `ON`'a yazılır. `WHERE`'e yazarsan `LEFT JOIN`'in anlamı kaybolur.
+- `LEFT JOIN`'de sağdaki tablonun koşulları `ON`'a yazılır. `WHERE`'e yazarsan `LEFT JOIN`'in anlamı kaybolur. Tek istisna eşi olmayanları ararken yazılan `IS NULL` kontrolü, o `WHERE`'de kalır (3. soru).
 - Bir kayda "birden çok" bağlı iki tabloyu aynı anda birleştirip toplarsan sayılar çarpılır. Önce topla, sonra birleştir.
 
 ## Sorular

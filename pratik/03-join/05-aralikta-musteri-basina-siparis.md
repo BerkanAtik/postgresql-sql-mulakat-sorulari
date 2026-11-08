@@ -73,6 +73,6 @@ Sonuç aynı ama bu sürüm bütün siparişleri birleştirip sonra sayarken eli
 
 ## Mülakatta
 
-"`LEFT JOIN`'de koşulu `ON`'a yazmakla `WHERE`'e yazmak arasında fark var mı?" sorusu, junior ile daha tecrübeli adayı ayırmak için sık kullanılıyor. Bu örneği anlatabiliyorsan cevabın hazır: `INNER JOIN`'de fark yok, `LEFT JOIN`'de sağ tablonun koşulu `WHERE`'e yazılırsa eşleşmeyen satırlar elenir ve sorgu `INNER JOIN`'e dönüşür.
+"`LEFT JOIN`'de koşulu `ON`'a yazmakla `WHERE`'e yazmak arasında fark var mı?" sorusu, junior ile daha tecrübeli adayı ayırmak için sık kullanılıyor. Bu örneği anlatabiliyorsan cevabın hazır: `INNER JOIN`'de fark yok, `LEFT JOIN`'de sağ tablonun koşulu `WHERE`'e yazılırsa eşleşmeyen satırlar elenir ve sorgu `INNER JOIN`'e dönüşür (`IS NULL` ile eşi olmayanları aradığın durum hariç).
 
 <!-- beklenen-satir: 200 -->

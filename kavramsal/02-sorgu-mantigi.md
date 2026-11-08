@@ -59,7 +59,7 @@ Ne zaman hangisi? Gruplamaya girmesini istemediğin satırları `WHERE` ile erke
 
 - Pratikte en çok `INNER` ve `LEFT` kullanılır. `RIGHT JOIN`, tabloların yerini değiştirip `LEFT JOIN` yazarak hep ifade edilebilir, çoğu kod tabanında görmezsin.
 - "Hiç siparişi olmayan müşteriler" tipi sorular `LEFT JOIN ... WHERE sag.kolon IS NULL` (ya da `NOT EXISTS`) ile çözülür: 20 satır.
-- `LEFT JOIN`'de sağ tabloya ait koşulu `WHERE`'e yazarsan `INNER JOIN`'e dönüşür, çünkü `NULL` satırlar elenir. Koşul `ON` içinde olmalı. Bunun detayı [Modül 3'te](../pratik/03-join/README.md).
+- `LEFT JOIN`'de sağ tabloya ait koşulu `WHERE`'e yazarsan `INNER JOIN`'e dönüşür, çünkü `NULL` satırlar elenir. Koşul `ON` içinde olmalı. İstisnası eşi olmayan satırları bulmak için yazılan `WHERE sag.id IS NULL` kontrolü, o bilerek `WHERE`'de durur. Bunun detayı [Modül 3'te](../pratik/03-join/README.md).
 - `CROSS JOIN` istemeden de olur: `JOIN` yazıp `ON` koşulunu unutursan satır sayısı çarpılır.
 
 ## 10. UNION ile UNION ALL arasındaki fark nedir?
