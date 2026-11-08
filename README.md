@@ -1,5 +1,7 @@
 # SQL ve PostgreSQL Mülakat Soruları
 
+[![Çözümleri doğrula](https://github.com/BerkanAtik/postgresql-sql-mulakat-sorulari/actions/workflows/dogrulama.yml/badge.svg)](https://github.com/BerkanAtik/postgresql-sql-mulakat-sorulari/actions/workflows/dogrulama.yml)
+
 Junior ve stajyer mülakatlarında sık karşına çıkan SQL sorularını, kendi bilgisayarında çalıştırabileceğin hazır bir PostgreSQL veritabanıyla birlikte topluyorum. Sorular, çözümler ve açıklamalar Türkçe.
 
 Soruyu okuyorsun, sorguyu kendin yazıp gerçek bir veritabanında çalıştırıyorsun, sonra çözümle karşılaştırıyorsun. Çözümlerin hepsi PostgreSQL 17'de çalıştırılıp doğrulanıyor.
@@ -17,8 +19,8 @@ Soruyu okuyorsun, sorguyu kendin yazıp gerçek bir veritabanında çalıştır�
 Bilgisayarında [Docker](https://www.docker.com/products/docker-desktop/) kurulu olması yeterli.
 
 ```bash
-git clone <bu-reponun-adresi>
-cd <klasör-adı>
+git clone https://github.com/BerkanAtik/postgresql-sql-mulakat-sorulari.git
+cd postgresql-sql-mulakat-sorulari
 docker compose up -d
 ```
 
@@ -99,4 +101,12 @@ Soru dosyalarındaki çözümlerin gerçekten çalıştığını kontrol eden bi
 bash scripts/validate.sh
 ```
 
-Hem örnek verinin bozulmadığını hem de her çözümün hatasız çalıştığını kontrol eder. Bir soruda yanlış bir şey bulursan ya da kendi sorunu eklemek istersen issue açabilirsin.
+Hem örnek verinin bozulmadığını hem de her çözümün hatasız çalıştığını kontrol eder. Aynı kontrol GitHub'da her push'ta otomatik çalışıyor.
+
+## Katkı
+
+Bir soruda yanlış bir şey bulursan ya da kendi sorunu eklemek istersen issue açabilirsin. Nasıl soru eklenir, hangi biçim izlenir [CONTRIBUTING.md](CONTRIBUTING.md) dosyasında.
+
+## Lisans
+
+[MIT](LICENSE)

@@ -1,0 +1,44 @@
+name: Çözümleri doğrula
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  dogrula:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:17
+        env:
+          POSTGRES_USER: ogrenci
+          POSTGRES_PASSWORD: sifre
+          POSTGRES_DB: eticaret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ogrenci -d eticaret"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: ogrenci
+      PGPASSWORD: sifre
+      PGDATABASE: eticaret
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: psql var mı kontrol et
+        run: command -v psql || (sudo apt-get update && sudo apt-get install -y postgresql-client)
+
+      - name: Örnek veritabanını yükle
+        run: psql -v ON_ERROR_STOP=1 -f db/01_sema.sql -f db/02_veri.sql
+
+      - name: Çözümleri doğrula
+        run: bash scripts/validate.sh
