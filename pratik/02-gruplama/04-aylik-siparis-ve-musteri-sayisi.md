@@ -65,3 +65,6 @@ ORDER BY ay;
 "Bu ay kaç farklı kullanıcı aktifti?" tarzı sorular mülakatlarda sık gelir. Cevabın `COUNT(DISTINCT kullanici_id)` ve ardından uyarı: büyük tablolarda `DISTINCT` hesabı pahalıdır, çünkü veritabanı değerleri ayrıca tekilleştirmek zorunda.
 
 <!-- beklenen-satir: 12 -->
+<!-- alternatif-cikti-farkli -->
+<!-- to_char alternatifi ayı '2024-01' metni olarak gösteriyor; değerlerin aynı olduğu ayrıca kontrol edildi. -->
+

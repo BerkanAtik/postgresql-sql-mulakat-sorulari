@@ -45,6 +45,7 @@ Gerçek veri temiz olmaz, mülakat soruları da çoğunlukla bu pürüzlere tak�
 - En çok adet satan ürün (`Atlama İpi`) ile en çok ciro yapan ürün (`Dizüstü Bilgisayar`) farklı.
 - Siparişler yıl boyunca artıyor: ocakta 46, aralıkta 104 sipariş var. Aylık karşılaştırma soruları için.
 - `calisanlar` tablosunda 10 ve 11 numaralı iki kişinin maaşı aynı. `RANK` ile `DENSE_RANK` arasındaki farkı göstermek için.
+- Bazı çalışanlar kendi yöneticisinden fazla kazanıyor. Self join sorularının boş sonuç döndürmemesi için.
 
 ## Bilmen gerekenler
 

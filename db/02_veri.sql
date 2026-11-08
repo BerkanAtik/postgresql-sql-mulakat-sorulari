@@ -223,6 +223,8 @@ ORDER BY siparis_id, sira;
 -- Çalışanlar (şirketin kendi ekibi)
 --   * Genel müdürün yöneticisi yok (NULL).
 --   * 10 ve 11 numaralı çalışanların maaşı aynı (RANK / DENSE_RANK farkı için).
+--   * 6 numaralı Dilara (kıdemli mimar) ve 15 numaralı Kaan (piyasa ücretiyle yeni
+--     işe alınmış) kendi yöneticilerinden fazla kazanıyor.
 -- ---------------------------------------------------------------
 INSERT INTO calisanlar (calisan_id, ad, soyad, departman, yonetici_id, maas, ise_giris_tarihi) VALUES
     (1,  'Murat',   'Aksoy',    'Yönetim',            NULL, 85000.00, '2015-03-01'),
@@ -230,7 +232,7 @@ INSERT INTO calisanlar (calisan_id, ad, soyad, departman, yonetici_id, maas, ise
     (3,  'Hakan',   'Tunç',     'Satış',              1,    58000.00, '2016-09-01'),
     (4,  'Nermin',  'Eren',     'İnsan Kaynakları',   1,    52000.00, '2017-01-10'),
     (5,  'Okan',    'Bozkurt',  'Teknoloji',          2,    41000.00, '2019-02-18'),
-    (6,  'Dilara',  'Sezer',    'Teknoloji',          2,    39000.00, '2020-05-04'),
+    (6,  'Dilara',  'Sezer',    'Teknoloji',          2,    64000.00, '2020-05-04'),
     (7,  'Tarık',   'Uysal',    'Teknoloji',          5,    28000.00, '2022-09-12'),
     (8,  'Pınar',   'Acar',     'Satış',              3,    34000.00, '2019-11-25'),
     (9,  'Volkan',  'Tekin',    'Satış',              3,    31000.00, '2021-03-08'),
@@ -239,7 +241,7 @@ INSERT INTO calisanlar (calisan_id, ad, soyad, departman, yonetici_id, maas, ise
     (12, 'Esra',    'Kaplan',   'İnsan Kaynakları',   4,    33000.00, '2020-10-12'),
     (13, 'Berk',    'Yavuz',    'İnsan Kaynakları',   12,   22000.00, '2024-01-15'),
     (14, 'Ceren',   'Özer',     'Müşteri Hizmetleri', 3,    26000.00, '2022-04-18'),
-    (15, 'Kaan',    'Ateş',     'Müşteri Hizmetleri', 14,   20500.00, '2024-03-04');
+    (15, 'Kaan',    'Ateş',     'Müşteri Hizmetleri', 14,   27500.00, '2024-03-04');
 
 -- ---------------------------------------------------------------
 -- Elle numara verdiğimiz için sequence'ları yeni kayıtlar çakışmasın diye güncelle

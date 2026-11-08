@@ -14,6 +14,9 @@
 #     Her biri ayrı ayrı çalıştırılır, hata veren olursa test düşer.
 #   - İsteğe bağlı <!-- beklenen-satir: 12 --> satırı: her bloğun döndürdüğü satır sayısı
 #     bu sayıya eşit olmalı (alternatif çözümler de aynı sonucu vermek zorunda).
+#   - Alternatif çözümlerin çıktısı, satır sırasından bağımsız olarak asıl çözümle (ilk blok)
+#     birebir aynı olmalı. Alternatif bilerek farklı biçimde çıktı veriyorsa (örneğin tarihi
+#     metin olarak gösteriyorsa) dosyaya <!-- alternatif-cikti-farkli --> ekleyin.
 # "Sık yapılan hatalar" gibi diğer bölümlerdeki sql blokları çalıştırılmaz.
 # Çözümler BEGIN ... ROLLBACK içinde çalışır, veritabanı değişmez.
 # (Çözümün kendisi BEGIN/COMMIT içeriyorsa sarmalanmaz, o durumda dikkatli olun.)
@@ -146,6 +149,8 @@ else
         fi
 
         beklenen="$(grep -o '<!-- beklenen-satir: [0-9]* -->' "$dosya" | head -n 1 | grep -o '[0-9][0-9]*')"
+        cikti_karsilastir=1
+        grep -q '<!-- alternatif-cikti-farkli -->' "$dosya" && cikti_karsilastir=0
         dosya_temiz=1
         satirlar=""
 
@@ -169,6 +174,14 @@ else
             satirlar="$satirlar $gelen"
             if [ -n "$beklenen" ] && [ "$gelen" != "$beklenen" ]; then
                 hata "$dosya (blok $i)" "beklenen satır: $beklenen, gelen: $gelen"
+                dosya_temiz=0
+            fi
+
+            # Alternatifler asıl çözümle aynı veriyi döndürmeli (satır sırası önemsiz).
+            printf '%s\n' "$cikti" | LC_ALL=C sort > "$dizin/cikti_$i.txt"
+            if [ "$i" -gt 1 ] && [ "$cikti_karsilastir" -eq 1 ] && [ -f "$dizin/cikti_1.txt" ] \
+                && ! cmp -s "$dizin/cikti_1.txt" "$dizin/cikti_$i.txt"; then
+                hata "$dosya (blok $i)" "çıktısı asıl çözümden (1. blok) farklı. Bilerek farklıysa dosyaya <!-- alternatif-cikti-farkli --> ekleyin."
                 dosya_temiz=0
             fi
         done

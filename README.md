@@ -71,7 +71,7 @@ Sadece çözümü okuyup geçmek pek işe yaramıyor, elin yazmayınca mülakatt
 |---|---|---|
 | [01 Temel sorgular](pratik/01-temel-sorgular/README.md) | `WHERE`, `IN`, `ORDER BY`, `LIMIT`, `DISTINCT`, `NULL`, tarih aralığı | 6 soru hazır |
 | [02 Gruplama](pratik/02-gruplama/README.md) | `COUNT`, `SUM`, `AVG`, `GROUP BY`, `HAVING`, `COUNT(DISTINCT)` | 6 soru hazır |
-| 03 JOIN | `INNER`, `LEFT`, self join, hiç eşleşmeyen kayıtlar | yazılacak |
+| [03 JOIN](pratik/03-join/README.md) | `INNER`, `LEFT`, self join, hiç eşleşmeyen kayıtlar, çoğalan toplamlar | 9 soru hazır |
 | 04 Subquery ve CTE | `IN`, `EXISTS`, correlated subquery, `WITH` | yazılacak |
 | 05 Window functions | `ROW_NUMBER`, `RANK`, `LAG`, `LEAD`, kümülatif toplam | yazılacak |
 | 06 Index ve EXPLAIN | index türleri, `EXPLAIN ANALYZE` okumak | yazılacak |
