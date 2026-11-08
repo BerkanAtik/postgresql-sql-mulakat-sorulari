@@ -18,6 +18,8 @@
 #     birebir aynı olmalı. Alternatif bilerek farklı biçimde çıktı veriyorsa (örneğin tarihi
 #     metin olarak gösteriyorsa) dosyaya <!-- alternatif-cikti-farkli --> ekleyin.
 # "Sık yapılan hatalar" gibi diğer bölümlerdeki sql blokları çalıştırılmaz.
+# Bir modül klasöründe hazirlik.sql varsa (kendi tablosunu kuran modüller), sorulardan önce
+# o çalıştırılır.
 # Çözümler BEGIN ... ROLLBACK içinde çalışır, veritabanı değişmez.
 # (Çözümün kendisi BEGIN/COMMIT içeriyorsa sarmalanmaz, o durumda dikkatli olun.)
 
@@ -134,6 +136,15 @@ echo "== Soru çözümleri ($KOK)"
 if [ ! -d "$KOK" ]; then
     echo "atlandı  $KOK klasörü yok"
 else
+    # Bazı modüller kendi tablolarını hazırlik.sql ile kuruyor, önce onları çalıştır.
+    while IFS= read -r hazirlik; do
+        if cikti="$(sql -f "$hazirlik" 2>&1)"; then
+            tamam "$hazirlik (hazırlık)"
+        else
+            hata "$hazirlik (hazırlık)" "$cikti"
+        fi
+    done < <(find "$KOK" -type f -name 'hazirlik.sql' | sort)
+
     bulunan=0
     while IFS= read -r dosya; do
         bulunan=$((bulunan + 1))
