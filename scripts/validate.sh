@@ -21,7 +21,8 @@
 # Bir modül klasöründe hazirlik.sql varsa (kendi tablosunu kuran modüller), sorulardan önce
 # o çalıştırılır.
 # Çözümler BEGIN ... ROLLBACK içinde çalışır, veritabanı değişmez.
-# (Çözümün kendisi BEGIN/COMMIT içeriyorsa sarmalanmaz, o durumda dikkatli olun.)
+# Çözümün kendisi BEGIN ile başlıyorsa sarmalanmaz; bu durumda tek başına duran COMMIT
+# satırları çalıştırılırken ROLLBACK'e çevrilir (çıktı COMMIT'ten önceki SELECT'ten gelmeli).
 
 set -u
 
@@ -170,7 +171,9 @@ else
             calisma="$dizin/calis_$i.sql"
 
             if printf '%s' "$cozum" | grep -qiE '^[[:space:]]*(BEGIN|START[[:space:]]+TRANSACTION|COMMIT)\b'; then
-                printf '%s\n' "$cozum" > "$calisma"
+                # Çözüm kendi transaction'ını açıyorsa sarmalamıyoruz, ama tek başına duran
+                # COMMIT satırlarını ROLLBACK'e çeviriyoruz ki doğrulama veriyi değiştirmesin.
+                printf '%s\n' "$cozum" | awk '{ if (toupper($0) ~ /^[ \t]*COMMIT[ \t]*;?[ \t]*$/) print "ROLLBACK;"; else print }' > "$calisma"
             else
                 printf 'BEGIN;\n%s\nROLLBACK;\n' "$cozum" > "$calisma"
             fi

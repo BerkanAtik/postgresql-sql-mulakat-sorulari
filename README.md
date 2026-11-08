@@ -75,7 +75,7 @@ Sadece çözümü okuyup geçmek pek işe yaramıyor, elin yazmayınca mülakatt
 | [04 Alt sorgu ve CTE](pratik/04-alt-sorgu-ve-cte/README.md) | `IN`, `EXISTS`, correlated subquery, `WITH`, `WITH RECURSIVE` | 7 soru hazır |
 | [05 Window functions](pratik/05-window-functions/README.md) | `ROW_NUMBER`, `RANK`, `DENSE_RANK`, `LAG`, kümülatif toplam | 7 soru hazır |
 | [06 Index ve EXPLAIN](pratik/06-index-ve-explain/README.md) | `EXPLAIN ANALYZE` okumak, birleşik index, expression index, index'in işe yaramadığı durumlar | 4 soru hazır |
-| 07 Transaction | `BEGIN`, `COMMIT`, isolation level | yazılacak |
+| [07 Transaction](pratik/07-transaction/README.md) | `BEGIN`, `COMMIT`, `ROLLBACK`, `SAVEPOINT`, kayıp güncelleme, isolation level, deadlock | 6 soru hazır |
 | Kavramsal sorular | ACID, normalizasyon, index, `JOIN` farkları, `DELETE`/`TRUNCATE`/`DROP` | yazılacak |
 
 ## Örnek veritabanı
