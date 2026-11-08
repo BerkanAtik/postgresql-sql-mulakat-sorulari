@@ -4,7 +4,7 @@ Junior ve stajyer mülakatlarında sık karşına çıkan SQL sorularını, kend
 
 Soruyu okuyorsun, sorguyu kendin yazıp gerçek bir veritabanında çalıştırıyorsun, sonra çözümle karşılaştırıyorsun. Çözümlerin hepsi PostgreSQL 17'de çalıştırılıp doğrulanıyor.
 
-> **Durum:** Veritabanı ve doğrulama altyapısı hazır. Sorular modül modül ekleniyor, aşağıdaki tabloda hangisinin hazır olduğunu görebilirsin.
+> **Durum:** Veritabanı, doğrulama altyapısı ve ilk modül hazır. Diğer modüller sırayla ekleniyor, aşağıdaki tabloda hangisinin hazır olduğunu görebilirsin.
 
 ## Kimler için
 
@@ -69,7 +69,7 @@ Sadece çözümü okuyup geçmek pek işe yaramıyor, elin yazmayınca mülakatt
 
 | Modül | Konular | Durum |
 |---|---|---|
-| 01 Temel sorgular | `SELECT`, `WHERE`, `ORDER BY`, `LIMIT`, `DISTINCT`, `NULL` | yazılıyor |
+| [01 Temel sorgular](pratik/01-temel-sorgular/README.md) | `WHERE`, `IN`, `ORDER BY`, `LIMIT`, `DISTINCT`, `NULL`, tarih aralığı | 6 soru hazır |
 | 02 Gruplama | `COUNT`, `SUM`, `AVG`, `GROUP BY`, `HAVING` | yazılacak |
 | 03 JOIN | `INNER`, `LEFT`, self join, hiç eşleşmeyen kayıtlar | yazılacak |
 | 04 Subquery ve CTE | `IN`, `EXISTS`, correlated subquery, `WITH` | yazılacak |

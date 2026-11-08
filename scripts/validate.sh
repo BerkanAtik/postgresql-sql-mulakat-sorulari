@@ -10,8 +10,11 @@
 # Varsayılanlar docker-compose.yml'deki değerlerle aynı.
 #
 # Soru dosyalarında (NN-ad.md) şunları arar:
-#   - "## Çözüm" başlığından sonraki ilk ```sql bloğu: çalıştırılır, hata verirse test düşer.
-#   - İsteğe bağlı <!-- beklenen-satir: 12 --> satırı: çözümün döndürdüğü satır sayısı kontrol edilir.
+#   - "## Çözüm" ve "## Alternatif ..." başlıklarının altındaki bütün ```sql blokları.
+#     Her biri ayrı ayrı çalıştırılır, hata veren olursa test düşer.
+#   - İsteğe bağlı <!-- beklenen-satir: 12 --> satırı: her bloğun döndürdüğü satır sayısı
+#     bu sayıya eşit olmalı (alternatif çözümler de aynı sonucu vermek zorunda).
+# "Sık yapılan hatalar" gibi diğer bölümlerdeki sql blokları çalıştırılmaz.
 # Çözümler BEGIN ... ROLLBACK içinde çalışır, veritabanı değişmez.
 # (Çözümün kendisi BEGIN/COMMIT içeriyorsa sarmalanmaz, o durumda dikkatli olun.)
 
@@ -109,13 +112,16 @@ kontrol "kayıt tarihinden önce sipariş veren müşteri yok" \
 # ---------------------------------------------------------------
 # Soru dosyalarındaki çözümler
 # ---------------------------------------------------------------
-cozum_cikar() {
-    awk '
-        /^## Çözüm/                    { aktif = 1; next }
-        aktif && !icerde && /^## /     { exit }
-        aktif && !icerde && /^```sql/  { icerde = 1; next }
-        aktif && icerde  && /^```/     { exit }
-        aktif && icerde                { print }
+
+# cozumleri_ayir dosya.md hedef-klasor
+# "## Çözüm" ve "## Alternatif..." bölümlerindeki sql bloklarını 1.sql, 2.sql... diye ayırır.
+cozumleri_ayir() {
+    awk -v hedef="$2" '
+        /^## (Çözüm|Alternatif)/        { aktif = 1; next }
+        !icerde && /^## /               { aktif = 0; next }
+        aktif && !icerde && /^```sql/   { icerde = 1; n++; dosya = hedef "/" n ".sql"; next }
+        icerde && /^```/                { icerde = 0; close(dosya); next }
+        icerde                          { print > dosya }
     ' "$1"
 }
 
@@ -128,38 +134,53 @@ else
     bulunan=0
     while IFS= read -r dosya; do
         bulunan=$((bulunan + 1))
-        cozum="$(cozum_cikar "$dosya" | tr -d '\r')"
 
-        if [ -z "$cozum" ]; then
+        dizin="$(mktemp -d)"
+        cozumleri_ayir "$dosya" "$dizin"
+        blok_sayisi="$(find "$dizin" -name '*.sql' | wc -l | tr -d ' ')"
+
+        if [ "$blok_sayisi" -eq 0 ]; then
             hata "$dosya" "'## Çözüm' başlığının altında \`\`\`sql bloğu bulunamadı"
+            rm -rf "$dizin"
             continue
         fi
-
-        gecici="$(mktemp)"
-        if printf '%s' "$cozum" | grep -qiE '^[[:space:]]*(BEGIN|START[[:space:]]+TRANSACTION|COMMIT)\b'; then
-            printf '%s\n' "$cozum" > "$gecici"
-        else
-            printf 'BEGIN;\n%s\nROLLBACK;\n' "$cozum" > "$gecici"
-        fi
-
-        if ! cikti="$(sql -f "$gecici" 2>&1)"; then
-            hata "$dosya" "$cikti"
-            rm -f "$gecici"
-            continue
-        fi
-        rm -f "$gecici"
 
         beklenen="$(grep -o '<!-- beklenen-satir: [0-9]* -->' "$dosya" | head -n 1 | grep -o '[0-9][0-9]*')"
-        if [ -n "$beklenen" ]; then
-            gelen="$(printf '%s' "$cikti" | grep -c '')"
-            if [ "$gelen" = "$beklenen" ]; then
-                tamam "$dosya ($gelen satır)"
+        dosya_temiz=1
+        satirlar=""
+
+        for ((i = 1; i <= blok_sayisi; i++)); do
+            cozum="$(tr -d '\r' < "$dizin/$i.sql")"
+            calisma="$dizin/calis_$i.sql"
+
+            if printf '%s' "$cozum" | grep -qiE '^[[:space:]]*(BEGIN|START[[:space:]]+TRANSACTION|COMMIT)\b'; then
+                printf '%s\n' "$cozum" > "$calisma"
             else
-                hata "$dosya" "beklenen satır: $beklenen, gelen: $gelen"
+                printf 'BEGIN;\n%s\nROLLBACK;\n' "$cozum" > "$calisma"
             fi
-        else
-            tamam "$dosya (çalıştı)"
+
+            if ! cikti="$(sql -f "$calisma" 2>&1)"; then
+                hata "$dosya (blok $i)" "$cikti"
+                dosya_temiz=0
+                continue
+            fi
+
+            gelen="$(printf '%s' "$cikti" | grep -c '')"
+            satirlar="$satirlar $gelen"
+            if [ -n "$beklenen" ] && [ "$gelen" != "$beklenen" ]; then
+                hata "$dosya (blok $i)" "beklenen satır: $beklenen, gelen: $gelen"
+                dosya_temiz=0
+            fi
+        done
+
+        if [ "$dosya_temiz" -eq 1 ]; then
+            if [ -n "$beklenen" ]; then
+                tamam "$dosya ($blok_sayisi blok, her biri $beklenen satır)"
+            else
+                tamam "$dosya ($blok_sayisi blok çalıştı, satırlar:$satirlar)"
+            fi
         fi
+        rm -rf "$dizin"
     done < <(find "$KOK" -type f -name '[0-9][0-9]-*.md' | sort)
 
     [ "$bulunan" -eq 0 ] && echo "atlandı  $KOK altında soru dosyası yok"
