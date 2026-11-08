@@ -1,0 +1,2 @@
+# Windows'ta CRLF'e dönüşüp bash betiklerini ve SQL dosyalarını bozmasın
+* text=auto eol=lf

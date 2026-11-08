@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:17
+    container_name: sql-mulakat-db
+    environment:
+      POSTGRES_USER: ogrenci
+      POSTGRES_PASSWORD: sifre
+      POSTGRES_DB: eticaret
+    ports:
+      # Bilgisayarında zaten PostgreSQL kuruluysa 5432 dolu olur, o yüzden 5433 kullanıyoruz.
+      - "5433:5432"
+    volumes:
+      # db klasöründeki .sql dosyaları ilk açılışta alfabetik sırayla çalışır.
+      - ./db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ogrenci -d eticaret"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
