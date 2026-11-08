@@ -51,6 +51,8 @@ Koşulu `ON`'a yazınca anlamı değişiyor: "Müşterileri sadece Aralık sipar
 
 Kural şu: `LEFT JOIN`'de **sağdaki** tablonun koşullarını `ON`'a yaz. **Soldaki** tabloyu süzmek istiyorsan (örneğin sadece İstanbul'daki müşteriler) o koşul `WHERE`'e gider.
 
+Bir istisna var: 3. sorudaki anti join. Orada `s.musteri_id IS NULL` bilerek `WHERE`'de duruyor, çünkü eşleşme olup olmadığına `JOIN` bittikten sonra bakıyorsun. Onu `ON`'a taşırsan hiçbir müşteri elenmez ve 200 müşterinin hepsi gelir.
+
 ## Alternatif çözüm
 
 Birleştirmeyi tarih koşulu olmadan yapıp sadece Aralık siparişlerini saydırabilirsin. Önceki modülde gördüğün `FILTER` burada da işe yarıyor:
